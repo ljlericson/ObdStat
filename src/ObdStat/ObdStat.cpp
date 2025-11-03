@@ -1,8 +1,5 @@
 #include "ObdStat.hpp"
 
-using namespace boost::asio;
-using namespace std::chrono_literals;
-
 namespace ljl
 {
     ObdStat::ObdStat()
@@ -18,18 +15,20 @@ namespace ljl
             std::string portName = "COM3"; // change as needed
 
 #else
-            std::string portName = "/dev/ttyUSB0"; // or /dev/ttyACM0
+            std::string portName = "/dev/ttyUSB1"; // or /dev/ttyACM0
 
 #endif
-            ELM327 obd(portName);
-            obd.init();
+            m_obd = new Core::ELM327(portName);
+            m_obd->init();
 
             while (true) 
             {
-                std::string rpmResp = obd.requestPID("0C");
+                using namespace std::chrono_literals;
+
+                std::string rpmResp = m_obd->requestPID("0C");
                 double rpm = Utils::decodeRPM(rpmResp);
 
-                std::string spdResp = obd.requestPID("0D");
+                std::string spdResp = m_obd->requestPID("0D");
                 int speed = Utils::decodeSpeed(spdResp);
 
                 std::cout << "Speed: " << speed << " km/h, RPM: " << rpm << std::endl;

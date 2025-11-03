@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # --- Dependencies (from vcpkg) ---
 find_package(Boost REQUIRED COMPONENTS asio)
+find_package(nlohmann_json CONFIG REQUIRED)
 
 # No C++20 modules
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF) 
@@ -28,7 +29,10 @@ file(GLOB_RECURSE OBDSTAT_SOURCES CONFIGURE_DEPENDS
 
 target_sources(ObdStat PRIVATE ${OBDSTAT_SOURCES})
 
-target_link_libraries(ObdStat PRIVATE Boost::asio)
+target_link_libraries(ObdStat PRIVATE 
+    Boost::asio
+    nlohmann_json::nlohmann_json
+)
 
 # --- Compiler warnings ---
 if(MSVC)

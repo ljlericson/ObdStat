@@ -2,24 +2,22 @@
 
 namespace Utils
 {
-    // === Example PID decoders ===
-    double decodeRPM(const std::string& hexResponse) 
+    double decodeRPM(const std::string& hexResponse)
     {
-        // expects "410C1AF8"
         auto pos = hexResponse.find("410C");
-        if (pos == std::string::npos) return -1;
-        unsigned A, B;
-        std::stringstream ss;
-        ss << std::hex << hexResponse.substr(pos + 4);
-        ss >> A >> B;
-        return ((A * 256) + B) / 4.0;
+        if (pos == std::string::npos || pos + 8 > hexResponse.size()) return -1;
+
+        uint32_t A = std::stoul(hexResponse.substr(pos + 4, 2), nullptr, 16);
+        uint32_t B = std::stoul(hexResponse.substr(pos + 6, 2), nullptr, 16);
+
+        return ((A * 256.0) + B) / 4.0;
     }
 
-    int decodeSpeed(const std::string& hexResponse) 
+    uint8_t decodeSpeed(const std::string& hexResponse) 
     {
         auto pos = hexResponse.find("410D");
         if (pos == std::string::npos) return -1;
-        unsigned A;
+        uint8_t A; // trying to keep overhead to a minimum
         std::stringstream ss;
         ss << std::hex << hexResponse.substr(pos + 4, 2);
         ss >> A;
