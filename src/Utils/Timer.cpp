@@ -1,15 +1,20 @@
 #include "Timer.h"
 
-Util::Timer::Timer()
-    : m_start(std::chrono::high_resolution_clock::now()) { }
-
-void Util::Timer::reset()
+void Utils::Timer::start()
 {
     m_start = std::chrono::high_resolution_clock::now();
 }
 
-float Util::Timer::sinceStarted() const
+Utils::Timer::operator bool()
+{
+    return m_started;
+}
+
+float Utils::Timer::sinceStarted() const
 {
     using namespace std::chrono;
-    return duration_cast<duration<float, std::milli>>(high_resolution_clock::now() - m_start).count();
+    if(m_started)
+        return duration_cast<duration<float, std::milli>>(high_resolution_clock::now() - m_start).count();
+    
+    return -1.0f;
 }

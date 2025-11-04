@@ -1,19 +1,20 @@
 #pragma once
 #include <chrono>
 
-namespace Util
+namespace Utils
 {
     class Timer 
     {
     public:
         
-        Timer();
+        void start();
 
-        void reset();
+        operator bool();
 
         float sinceStarted() const;
 
     private:
         std::chrono::high_resolution_clock::time_point m_start;
+        bool m_started;
     };
 }
