@@ -8,6 +8,8 @@ namespace Utils
     public:
         
         void start();
+        
+        void stop();
 
         operator bool();
 

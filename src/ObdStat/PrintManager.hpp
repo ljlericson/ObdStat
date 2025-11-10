@@ -1,5 +1,6 @@
+#pragma once
 #include <iostream>
-#include <unordered_map>
+#include <vector>
 #include <fstream>
 
 #include "../Utils/Timer.h"
@@ -41,9 +42,9 @@ namespace Manager
         void loop();
 
     private:
-        void printEvent(EventType e);
+        void printEvent(EventType e, double val);
 
-        std::unordered_map<EventType, double> m_events;
+        std::vector<std::pair<EventType, double>> m_events;
         Utils::Timer m_eventPrintTimer;
         // Core::PrinterInterface m_printerInterface;
     };

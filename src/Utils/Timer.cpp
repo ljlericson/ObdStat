@@ -5,6 +5,12 @@ void Utils::Timer::start()
     m_start = std::chrono::high_resolution_clock::now();
 }
 
+void Utils::Timer::stop()
+{
+    m_started = false;
+    m_start = {};
+}
+
 Utils::Timer::operator bool()
 {
     return m_started;

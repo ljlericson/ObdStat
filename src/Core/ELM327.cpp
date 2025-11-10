@@ -25,17 +25,16 @@ namespace Core
         send("ATSP0"); // Auto protocol select
     }
 
-    std::string ELM327::requestPID(const std::string& pid) 
+    double ELM327::requestPID(const char* pid) 
     {
-        std::string cmd = "01" + pid;
-        return send(cmd);
+        return std::stod(send(std::string(pid)));
     }
 
     std::string ELM327::send(const std::string& cmd)
     {
         using namespace boost::asio;
         using namespace std::chrono_literals;
-        
+
         std::string request = cmd + "\r";
         write(m_port, buffer(request));
         std::this_thread::sleep_for(100ms);
@@ -48,7 +47,7 @@ namespace Core
 
         std::string response;
         char c;
-        for (;;) 
+        for (;;)
         {
             read(m_port, buffer(&c, 1));
             if (c == '>') break; // ELM prompt

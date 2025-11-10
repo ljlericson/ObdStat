@@ -1,13 +1,12 @@
 #pragma once
-#include <boost/asio.hpp>
 #include <iostream>
+#include <fstream>
+#include <vector>
 #include <sstream>
-#include <thread>
-#include <chrono>
 
-namespace Core
+namespace Utils
 {
-    class ELM327 
+    class ElmEmulator
     {
     public:
         static constexpr const char* ENG_COOLENT_TEMP_PID = "0105";
@@ -16,18 +15,21 @@ namespace Core
         static constexpr const char* VEC_SPEED_PID = "010D";
         static constexpr const char* VEC_FUEL_LVL_PID = "012F";
 
-        ELM327(const std::string& portName);
+        ElmEmulator(const std::string& fpath);
+
+        bool dataLeft();
 
         void init();
 
         double requestPID(const char* pid);
-
-        std::string send(const std::string& cmd);
-
     private:
-        std::string readResponse();
-
-        boost::asio::io_context m_io;
-        boost::asio::serial_port m_port;
+        // trying to emulate inefficiency in
+        // elm327 lookup speed by having
+        // massive inefficient vectors
+        std::vector<double> m_engTemps;
+        std::vector<double> m_engWorks;
+        std::vector<double> m_vecSpeeds;
+        std::vector<double> m_vecFuels;
+        std::vector<size_t> m_engRunTimes;
     };
 }
